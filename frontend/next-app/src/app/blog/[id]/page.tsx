@@ -1,6 +1,4 @@
 import CommentSection from "@/components/blog/comment/CommentSection";
-import PostComment from "@/components/blog/comment/PostComment";
-import PostCommentEditor from "@/components/blog/comment/PostCommentEditor";
 import PostDeleteButton from "@/components/common/PostDeleteButton";
 import Link from "next/link";
 

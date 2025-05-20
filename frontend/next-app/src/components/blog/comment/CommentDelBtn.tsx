@@ -1,6 +1,6 @@
 'use client'
 
-import { deleteComment, deletePost } from "@/lib/services/blogService";
+import { deleteComment } from "@/lib/services/blogService";
 
 
 export default function CommentDeleteButton({CommentId, onDelete}:{
@@ -12,7 +12,7 @@ export default function CommentDeleteButton({CommentId, onDelete}:{
     const handleDelete = async () => {
         
         try {
-            const res = await deleteComment(CommentId)
+            await deleteComment(CommentId)
             
             onDelete();
 
