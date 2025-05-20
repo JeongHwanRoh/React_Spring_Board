@@ -24,7 +24,7 @@ export default async function BlogList() {
       </div>
       <hr className="my-4 border-gray-300" />
       <div>
-        {posts.map((post)=>{
+        {posts.map((post : any)=>{
 
           return( 
           <div key={post.id}>

@@ -2,6 +2,7 @@ package com.taskco.controller;
 
 import java.util.List;
 
+import com.taskco.dto.blog.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,9 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.taskco.dto.blog.PostListResDto;
-import com.taskco.dto.blog.PostResDto;
-import com.taskco.dto.blog.SavePostReqDto;
 import com.taskco.service.BlogService;
 
 import lombok.RequiredArgsConstructor;
@@ -63,7 +61,8 @@ public class BlogController {
 		return ResponseEntity.ok().build();
 		
 	}
-	
+
+	// 글 삭제
 	@DeleteMapping("/posts/{id}")
 	public ResponseEntity<?> deletePostById(@PathVariable Long id){
 		
@@ -79,7 +78,36 @@ public class BlogController {
 		return ResponseEntity.ok().build();
 		
 	}
+
+	// 댓글 저장
+	@PostMapping("/comment")
+	public ResponseEntity<?> saveCommentByPostId(@RequestBody SaveCommentReqDto dto){
+
+		blogService.saveComment(dto);
+
+		return ResponseEntity.ok().build();
+
+	}
 	
-	
+	// 댓글 목록 조회
+	@GetMapping("/comments/{postId}")
+	public ResponseEntity<?> getCommentbyPostId(@PathVariable Long postId){
+
+		System.out.println("controller getCommentbyPostId :"+ postId);
+
+		List<CommentsResDto> result = blogService.getCommentListByPostId(postId);
+
+		return ResponseEntity.ok(result);
+
+	}
+
+	// 댓글 삭제
+	@DeleteMapping("/comment/{id}")
+	public ResponseEntity<?> deleteCommentById(@PathVariable Long id){
+
+		blogService.deleteComment(id);
+		return ResponseEntity.ok().build();
+
+	}
 	
 }

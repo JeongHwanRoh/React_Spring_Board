@@ -21,6 +21,11 @@ export interface SaveBlogPostReq {
 //   const post = await res.json();
 //   //const posts = await res.json();
 
+export interface SaveCommentReq{
+    post_id: number
+    author :string;
+    text : string;
+}
 
 export interface getPostJsonRes {
 
@@ -61,4 +66,24 @@ export async function getPostJson (
 
     return await api.get(`api/blog/posts/getjson/${id}`);
 
+}
+
+export async function SaveComment(
+    data: SaveCommentReq
+
+): Promise<AxiosResponse> {
+
+    console.log("save comment",data)
+    
+    return await api.post(`api/blog/comment`, data)
+}
+
+
+
+
+export async function deleteComment (
+    id : number
+) : Promise<AxiosResponse>{
+
+    return await api.delete(`api/blog/comment/${id}`)
 }

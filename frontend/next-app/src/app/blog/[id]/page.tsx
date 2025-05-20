@@ -1,14 +1,26 @@
+import CommentSection from "@/components/blog/comment/CommentSection";
 import PostDeleteButton from "@/components/common/PostDeleteButton";
 import Link from "next/link";
 
 export default async function PostPage({ params }: { params: { id: string } }) {
-  const res = await fetch(`http://localhost:8089/api/blog/posts/${params.id}`, {
+  const postRes = await fetch(`http://localhost:8089/api/blog/posts/${params.id}`, { // 해당하는 포스트 불러오기
     cache: "no-store", // SSR 목적일 경우
   }); // 별도의 필드 주입이 없으면 get 사용
-  //console.log("posts : ",await res.json())
-  console.log();
-  const post = await res.json();
-  //const posts = await res.json();
+  const post = await postRes.json();
+
+  const commentRes = await fetch(`http://localhost:8089/api/blog/comments/${params.id}`,{
+    cache: "no-store",
+  });
+
+  console.log(typeof(commentRes))
+  let comments = [];
+  if (commentRes.ok) {
+    comments = await commentRes.json();
+  } else {
+    const errorText = await commentRes.text();
+    console.error("Comment fetch error:", errorText);
+    // 필요시 빈 배열 유지 or 오류 메시지 표시
+  }
 
   return (
     <div className="flex flex-col">
@@ -22,6 +34,8 @@ export default async function PostPage({ params }: { params: { id: string } }) {
         <Link href={`/blog/${post.id}/edit`}> 수정하기 </Link>
         <PostDeleteButton postId={post.id} />
       </div>
+      <CommentSection postId={post.id} intitialComments={comments}/>
+      
     </div>
   );
 }

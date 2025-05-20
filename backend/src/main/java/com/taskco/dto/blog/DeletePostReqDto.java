@@ -5,7 +5,7 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class PostDeleteReqDto {
+public class DeletePostReqDto {
 	
 	private Long id;
 	

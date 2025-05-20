@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.taskco.dto.blog.*;
+import com.taskco.entity.PostComment;
+import com.taskco.repository.PostCommentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.taskco.dto.blog.PostListResDto;
-import com.taskco.dto.blog.PostResDto;
-import com.taskco.dto.blog.SavePostReqDto;
 import com.taskco.entity.BlogPost;
 import com.taskco.repository.BlogPostRepository;
 
@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class BlogService {
 
 	private final BlogPostRepository blogPostRepository;
+	private final PostCommentRepository postCommentRepository;
 
 	// 글 저장
 	public void savePost(SavePostReqDto dto) {
@@ -41,7 +42,7 @@ public class BlogService {
 
 		for (BlogPost post : listPost) { // 매핑 반복문
 			PostListResDto dto = PostListResDto.builder().id(post.getId()).title(post.getTitle())
-					.created_at(post.getCreated_at()).build();
+					.createdAt(post.getCreated_at()).build();
 
 			result.add(dto);
 
@@ -62,7 +63,7 @@ public class BlogService {
 		PostResDto dto = PostResDto.builder().id(post.getId()).title(post.getTitle()).page_html(post.getPage_html())
 				.build();
 
-		System.out.println(dto);
+		//System.out.println(dto);
 		return dto;
 	}
 
@@ -86,7 +87,6 @@ public class BlogService {
 	}
 
 	// 글 업데이트
-
 	public void updatePost(SavePostReqDto dto) {
 		
 		// 기존 엔터티 조회
@@ -102,5 +102,44 @@ public class BlogService {
         blogPostRepository.save(post);
 
 	}
+
+	// 댓글 저장
+	public void saveComment(SaveCommentReqDto dto){
+
+		System.out.println("SaveCommentReqDto :"+ dto);
+		PostComment comment = dto.toEntity();
+		postCommentRepository.save(comment);
+
+	}
+
+	// 댓글 목록 조회
+	public List<CommentsResDto> getCommentListByPostId(Long postId){
+
+		List<PostComment> commentList = postCommentRepository.findAllByPostId(postId);
+		System.out.println("service commentList :"+ commentList);
+
+		List<CommentsResDto> result = new ArrayList<>();
+
+		for (PostComment comment : commentList){
+			CommentsResDto dto = CommentsResDto
+					.builder()
+					.id(comment.getId())
+					.author(comment.getAuthor())
+					.text(comment.getText())
+					.createdAt(comment.getCreatedAt())
+					.build();
+			result.add(dto);
+		}
+
+		return result;
+	}
+
+	// 댓글 삭제
+	public void deleteComment(Long id) {
+
+		postCommentRepository.deleteById(id);
+
+	}
+
 
 }
