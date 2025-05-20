@@ -5,3 +5,7 @@
 .metadata/
 
 spring/
+
+
+###  환경변수
+../.env
